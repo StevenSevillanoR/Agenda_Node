@@ -69,3 +69,32 @@ input {
   font-family: 'Kaushan Script', cursive;
   font-family: 'Neucha', cursive;
 }
+
+.registroButton {
+  margin-top: 8px;
+  width: 100px;
+  height: 32px;
+  border-radius: 4px;
+  border: none;
+  font-size: 15px;
+  color: #FFFFFF;
+  background: #1270b6;
+  font-family: 'Kaushan Script', cursive;
+  font-family: 'Neucha', cursive;
+}
+
+.registro{
+  color: white;
+  font-family: 'Kaushan Script', cursive;
+  font-size: 2rem;
+}
+
+.labelInput{
+  margin-top: 8px;
+  align-items: left !important;
+  color: white;
+  font-family: 'Neucha', cursive;
+  font-size: 15px;
+}
+
+

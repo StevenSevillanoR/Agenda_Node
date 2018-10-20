@@ -5,25 +5,29 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio de sesión</title>
-    <link rel="stylesheet" href="css/index.css"/>
+    <link rel="stylesheet" href="css/registro.css"/>
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Neucha" rel="stylesheet">
+    
   </head>
   <body>
     <div class="loginContainer">
-      <div class="loginTitle">Inicio de Sesión</div>
+      <div class="loginTitle">Registro</div>
       <div class="fields-Container">
-        <input type="text" id="user" placeholder="Usuario..." />
-        <input type="password" id="pass" placeholder="Contraseña..." />
-        <button id="login" class="loginButton">Ingresar</button>
-      </div>
-      <div class="row">
-          <div class="registro">
-              <h6>¿Aún no tienes una cuenta?  <button class="registroButton">Regístrate</button></h6>
-          </div>
+        <label class="labelInput" for="nombre">Nombres</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre..." />
+        <label class="labelInput" for="usuario">E-mail</label>
+        <input type="text" id="user" placeholder="Email..." />
+        <label class="labelInput" for="nacimiento">Fecha de Nacimiento</label>
+        <input type="date" id="fNacimiento" name="nacimiento" placeholder="Fecha de Nacimiento..."/>
+        <label class="labelInput" for="password">Contraseña</label>
+        <input type="password" id="pass" name="password" placeholder="Contraseña..." />
+        <input type="password" id="Cpass" placeholder="Confirme su contraseña..."/>
+        <button id="login" class="loginButton" type="submit">Registrarse</button>
       </div>
     </div>
     <script src="js/jquery.js"></script>
+    
     <script>
         var nombreUsuario = $('#user')
         var pass = $('#pass')
@@ -37,10 +41,6 @@
             } else {
                 alert("Complete todos los campos")
             }
-        })
-
-        $('.registroButton').on('click', function(event){
-          window.location.href = "http://localhost:8082/registro.html"
         })
     </script>
   </body>
