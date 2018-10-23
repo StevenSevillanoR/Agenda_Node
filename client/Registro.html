@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de sesión</title>
+    <title>Registro</title>
     <link rel="stylesheet" href="css/registro.css"/>
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Neucha" rel="stylesheet">
@@ -15,33 +15,18 @@
       <div class="loginTitle">Registro</div>
       <div class="fields-Container">
         <label class="labelInput" for="nombre">Nombres</label>
-        <input type="text" id="nombre" name="nombre" placeholder="Nombre..." />
-        <label class="labelInput" for="usuario">E-mail</label>
-        <input type="text" id="user" placeholder="Email..." />
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre..." required/>
+        <label class="labelInput" for="user">E-mail</label>
+        <input type="text" id="user" placeholder="Email..." name="user" required/>
         <label class="labelInput" for="nacimiento">Fecha de Nacimiento</label>
-        <input type="date" id="fNacimiento" name="nacimiento" placeholder="Fecha de Nacimiento..."/>
+        <input type="date" id="fNacimiento" name="nacimiento" required/>
         <label class="labelInput" for="password">Contraseña</label>
-        <input type="password" id="pass" name="password" placeholder="Contraseña..." />
-        <input type="password" id="Cpass" placeholder="Confirme su contraseña..."/>
-        <button id="login" class="loginButton" type="submit">Registrarse</button>
+        <input type="password" id="pass" name="password" placeholder="Contraseña..." required/>
+        <input type="password" id="cpass" name="password" placeholder="Confirme su contraseña..." required/>
+        <button id="registro" class="loginButton" type="submit">Registrarse</button>
       </div>
     </div>
     <script src="js/jquery.js"></script>
-    
-    <script>
-        var nombreUsuario = $('#user')
-        var pass = $('#pass')
-        $('.loginButton').on('click', function(event) {
-            if (nombreUsuario.val() != "" && pass.val() != "") {
-                $.post('/login',{user: nombreUsuario.val(), pass: pass.val()}, function(response) {
-                    if (response == "Validado") {
-                        window.location.href = "http://localhost:8082/main.html"
-                    }
-                })
-            } else {
-                alert("Complete todos los campos")
-            }
-        })
-    </script>
+    <script src="js/registro.js"></script>
   </body>
 </html>

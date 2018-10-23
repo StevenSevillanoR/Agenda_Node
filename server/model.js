@@ -8,11 +8,10 @@ let UserSchema = new Schema({
   usuario: { type: String, require: true },
   password: { type: String, require: true },
   fNacimiento: {type: Date, require:true},
-  sexo: { type: String, require: true, enum: ['M', 'S'] },
   eventos: {type: Object, require: false}
 })
 
-/*let EventSchema = new Schema({
+let EventSchema = new Schema({
   eventId: { type: Number, require: true, unique: true},
   evento: {type: String, require: true},
   titulo: { type: String, require: true },
@@ -21,12 +20,12 @@ let UserSchema = new Schema({
   fechaFin: { type: Date, require: false },
   horaFin: { type: Date, require: false },
   fullday: { type: Boolean, require: true}
-})*/
+})
 
 let UserModel = mongoose.model('Usuarios', UserSchema)
-//let EventModel = mongoose.model('Eventos', EventSchema)
+let EventModel = mongoose.model('Eventos', EventSchema)
 
-module.exports = UserModel
+module.exports = {UserModel, EventModel}
 
 
 

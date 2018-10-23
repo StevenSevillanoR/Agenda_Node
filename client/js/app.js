@@ -8,7 +8,7 @@ class EventManager {
     }
 
     obtenerDataInicial() {
-        let url = this.urlBase + "/all"
+        let url = this.urlBase + "/allEvents"
         $.get(url, (response) => {
             this.inicializarCalendario(response)
         })
@@ -87,7 +87,7 @@ class EventManager {
                 center: 'title',
                 right: 'month,agendaWeek,basicDay'
             },
-            defaultDate: '2016-11-01',
+            //defaultDate: '2016-11-01',
             navLinks: true,
             editable: true,
             eventLimit: true,

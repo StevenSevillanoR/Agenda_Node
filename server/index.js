@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static('client'))
 
 app.use('/users', Routing)
-//app.use('/events', Routing)
+app.use('/events', Routing)
 
 Server.listen(PORT, function(){
   console.log("Server in listening on port: "+PORT);

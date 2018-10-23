@@ -29,9 +29,15 @@
         var pass = $('#pass')
         $('.loginButton').on('click', function(event) {
             if (nombreUsuario.val() != "" && pass.val() != "") {
-                $.post('/login',{user: nombreUsuario.val(), pass: pass.val()}, function(response) {
-                    if (response == "Validado") {
+                let url = 'users/login'
+                let data = { user: nombreUsuario.val(), pass: pass.val() }
+                $.post(url, data, function(response) {
+                    console.log(response.message)
+                    if (response.message == "Validado") {
+                        alert("Su ingreso es exitoso")
                         window.location.href = "http://localhost:8082/main.html"
+                    }else{
+                        alert("El usuario o contraseña son incorrectos, por favor verifique su información")
                     }
                 })
             } else {
