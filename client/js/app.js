@@ -1,22 +1,40 @@
 
 class EventManager {
     constructor() {
-        this.urlBase = "/events"
+        this.urlBase = "/event"
         this.obtenerDataInicial()
-        this.inicializarFormulario()
+        //this.inicializarFormulario()
         this.guardarEvento()
+        //this.inicializarCalendario()
     }
 
     obtenerDataInicial() {
         let url = this.urlBase + "/allEvents"
+            //eventos = null
+        console.log(url, "Ingrese")
+        //this.inicializarCalendario(eventos)
         $.get(url, (response) => {
-            this.inicializarCalendario(response)
+            console.log(response, response.message, response.doc, response.err)
+            if(response.session == "Error"){
+              alert('Inicie sesión')
+              window.location.href = 'index.html'
+            }else{
+                if (response == null || !response) {
+                  console.log("Sin eventos")
+                  this.inicializarCalendario()
+                } else {
+                  console.log("Con eventos")
+                  this.inicializarCalendario(response.doc)
+                }
+                alert(response.message)
+            }
+            
         })
     }
 
     eliminarEvento(evento) {
         let eventId = evento._id
-        $.post('/events/delete/'+eventId, {id: eventId}, (response) => {
+        $.post('/event/delete/'+eventId, {id: eventId}, (response) => {
             alert(response)
         })
     }
@@ -24,63 +42,62 @@ class EventManager {
     guardarEvento() {
         $('.addButton').on('click', (ev) => {
             ev.preventDefault()
-            let nombre = $('#titulo').val(),
-            start = $('#start_date').val(),
-            title = $('#titulo').val(),
-            end = '',
-            start_hour = '',
-            end_hour = '';
+
+          let eventos = $('.calendario').fullCalendar('getEventSources')
+            console.log(eventos)
+                //idEvento = $('#titulo').val(),
+            let start = $('#start_date').val(),
+                title = $('#titulo').val(),
+                end = '',
+                start_hour = '',
+                end_hour = '',
+                fullday = ''
 
             if (!$('#allDay').is(':checked')) {
-                end = $('#end_date').val()
-                start_hour = $('#start_hour').val()
-                end_hour = $('#end_hour').val()
-                start = start + 'T' + start_hour
-                end = end + 'T' + end_hour
+              end_hour = $('#end_hour').val()  
+              end = $('#end_date').val()+'T'+ end_hour + 'Z'
+              start_hour = $('#start_hour').val()
+              start = start + 'T' + start_hour+'Z'
+              fullday = '0';
+            }else{
+              fullday = '1';
             }
-            let url = this.urlBase + "/new"
+
+            console.log(title, start, end, start_hour, end_hour, fullday)
+
+            let url = this.urlBase + "/addEvent"
             if (title != "" && start != "") {
                 let ev = {
                     title: title,
                     start: start,
-                    end: end
+                    end: end,
+                    start_hour: start_hour,
+                    end_hour: end_hour,
+                    fullday: fullday
                 }
+
+              console.log(url, ev)
+
                 $.post(url, ev, (response) => {
-                    alert(response)
+                  let eve = {
+                    title: title,
+                    start: start,
+                    end: end 
+                  }            
+                  console.log(response, response.message, response.evento)
+                  $('.calendario').fullCalendar('renderEvent', ev)
+                  alert("Evento añadido correctamente")
                 })
-                $('.calendario').fullCalendar('renderEvent', ev)
+              //window.location.reload()
+               
             } else {
                 alert("Complete los campos obligatorios para el evento")
             }
         })
     }
 
-    inicializarFormulario() {
-        $('#start_date, #titulo, #end_date').val('');
-        $('#start_date, #end_date').datepicker({
-            dateFormat: "yy-mm-dd"
-        });
-        $('.timepicker').timepicker({
-            timeFormat: 'HH:mm:ss',
-            interval: 30,
-            minTime: '5',
-            maxTime: '23:59:59',
-            defaultTime: '',
-            startTime: '5:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true
-        });
-        $('#allDay').on('change', function(){
-            if (this.checked) {
-                $('.timepicker, #end_date').attr("disabled", "disabled")
-            }else {
-                $('.timepicker, #end_date').removeAttr("disabled")
-            }
-        })
-    }
-
     inicializarCalendario(eventos) {
+      console.log(eventos)
         $('.calendario').fullCalendar({
             header: {
                 left: 'prev,next today',
@@ -99,7 +116,7 @@ class EventManager {
             },
             events: eventos,
             eventDragStart: (event,jsEvent) => {
-                $('.delete').find('img').attr('src', "img/trash-open.png");
+              $('.delete').find('img').attr('src', "../img/trash-open.png");
                 $('.delete').css('background-color', '#a70f19')
             },
             eventDragStop: (event,jsEvent) => {
@@ -120,3 +137,51 @@ class EventManager {
     }
 
     const Manager = new EventManager()
+
+    $(function(){
+      inicializarFormulario();
+      //Manager.obtenerDataInicial();
+    });
+
+    function inicializarFormulario() {
+      $('#start_date, #titulo, #end_date').val('');
+      $('#start_date, #end_date').datepicker({
+        dateFormat: "yy-mm-dd"
+      });
+      $('.timepicker').timepicker({
+        timeFormat: 'HH:mm:ss',
+        interval: 30,
+        minTime: '5',
+        maxTime: '23:59:59',
+        defaultTime: '',
+        startTime: '5:00',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true
+      });
+      $('#allDay').on('change', function () {
+        if (this.checked) {
+          $('.timepicker, #end_date').attr("disabled", "disabled")
+        } else {
+          $('.timepicker, #end_date').removeAttr("disabled")
+        }
+      })
+    }
+
+function cerrarSesion() {
+    $.ajax({
+      url: 'users/logout',
+      dataType: "text",
+      cache: false,
+      processData: false,
+      contentType: false,
+      type: 'POST',
+      success: function () {
+        alert("Saliendo")
+        window.location.href = 'http://localhost:8082/index.html';
+      },
+      error: function () {
+        alert("error en la comunicación con el servidor !!!");
+      }
+    })
+}

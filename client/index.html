@@ -32,11 +32,12 @@
                 let url = 'users/login'
                 let data = { user: nombreUsuario.val(), pass: pass.val() }
                 $.post(url, data, function(response) {
-                    console.log(response.message)
+                    console.log(response.message, response.session)
                     if (response.message == "Validado") {
                         alert("Su ingreso es exitoso")
                         window.location.href = "http://localhost:8082/main.html"
                     }else{
+                        //console.log(response.message)
                         alert("El usuario o contraseña son incorrectos, por favor verifique su información")
                     }
                 })
