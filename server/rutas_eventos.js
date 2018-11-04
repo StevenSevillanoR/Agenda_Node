@@ -56,4 +56,65 @@ Router.post('/addEvent', function (req, res) {
       })
 })
 
+//Eliminar un evento 
+Router.post('/delete/', function(req, res){
+  let eventoId = req.body.id;
+  
+  //res.send({message:"OK", eventoID: eventoId, doc: req.body})
+  
+  Events.findById(eventoId, (err, evento) => {
+    if (err) {
+      return res.status(500).send({ message: 'Error al intentar hallar el evento.' })
+    } else {
+      evento.remove(err => {
+        if (err) {
+          return res.status(500).send({ message: 'Error al intentar eliminar el evento.', error: err })
+        } else {
+          res.send({message:'El evento ha sido eliminado correctamente', evento: evento})
+        }
+      })
+    }
+  })
+})
+
+//Actualizar Eventos
+Router.post('/update/', function(req, res){
+
+  let eventoId = req.body._id,
+      start_hour = req.body.start_hour,
+      end_hour = req.body.end_hour,
+      start = '',
+      end = ''
+
+  if(start_hour == null || start_hour == ""){
+    start = req.body.start
+  }else{
+    start = req.body.start+'T'+start_hour+'Z'
+  }
+
+  if (end_hour == null || end_hour == "") {
+    end = req.body.end
+  } else {
+    end = req.body.end + 'T' + end_hour + 'Z'
+  }
+  
+  Events.findById(eventoId, (err, evento) =>{
+    if(err){
+      return res.status(500).send({ message: 'Error al intentar encontrar el evento.' })
+    }else{
+      Events.update({ _id: eventoId }, {
+        start: start,
+        end: end
+      }, (err) => {
+        if (err) {
+          return res.status(500).send({ message: 'Error al intentar actualizar el evento.' })
+        } else {
+          res.status(200).send({message:'El evento ha sido actualizado exitosamente', evento: evento, doc: {start, end, eventoId}})
+        }
+      })
+    }
+    //res.send({ message: "OK", doc: req.body })
+  })
+})
+
 module.exports = Router

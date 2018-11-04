@@ -26,16 +26,9 @@ class EventManager {
                   console.log("Con eventos")
                   this.inicializarCalendario(response.doc)
                 }
-                alert(response.message)
+                //alert(response.message)
             }
             
-        })
-    }
-
-    eliminarEvento(evento) {
-        let eventId = evento._id
-        $.post('/event/delete/'+eventId, {id: eventId}, (response) => {
-            alert(response)
         })
     }
 
@@ -55,9 +48,17 @@ class EventManager {
 
             if (!$('#allDay').is(':checked')) {
               end_hour = $('#end_hour').val()  
-              end = $('#end_date').val()+'T'+ end_hour + 'Z'
               start_hour = $('#start_hour').val()
-              start = start + 'T' + start_hour+'Z'
+              if(end_hour == null || end_hour == ""){
+                end = $('#end_date').val()
+              }else{
+                end = $('#end_date').val() + 'T' + end_hour + 'Z'
+              }
+              if (start_hour == null || start_hour == "") {
+                start = start
+              } else {
+                start = start + 'T' + start_hour + 'Z'
+              }              
               fullday = '0';
             }else{
               fullday = '1';
@@ -88,12 +89,60 @@ class EventManager {
                   $('.calendario').fullCalendar('renderEvent', ev)
                   alert("Evento añadido correctamente")
                 })
-              //window.location.reload()
+              window.location.reload()
                
             } else {
                 alert("Complete los campos obligatorios para el evento")
             }
         })
+    }
+
+    eliminarEvento(evento) {
+      console.log(evento)
+      let url = this.urlBase + "/delete/"
+      let eventId = evento._id
+      console.log(eventId)
+      $.post(url, { id: eventId }, (response) => {
+        console.log(response)
+        alert(response.message)
+        window.location.href = "main.html"
+      })
+    }
+
+    actualizarEvento(evento) {
+      console.log(evento)
+      let url = this.urlBase + "/update/"
+      let eventos = {}
+
+      if (evento.end === null) {
+        var start = moment(evento.start).format('YYYY-MM-DD'),
+            end = null
+        eventos = {
+          _id: evento._id,
+          start: start,
+          end: end
+        }
+        console.log(start, end)
+      } else {
+        var start = moment(evento.start).format('YYYY-MM-DD'),
+            end = moment(evento.end).format('YYYY-MM-DD')
+        eventos = {
+          _id: evento._id,
+          start: start,
+          end: end,
+          start_hour: evento.start_hour,
+          end_hour: evento.end_hour 
+        }
+        console.log(start, end)
+      }
+
+      console.log(url, eventos)
+
+      $.post(url, eventos, (response)=>{
+        console.log(response)
+        alert(response.message)
+        window.location.reload()
+      })
     }
 
     inicializarCalendario(eventos) {
@@ -129,8 +178,10 @@ class EventManager {
                 if (jsEvent.pageX >= x1 && jsEvent.pageX<= x2 &&
                     jsEvent.pageY >= y1 && jsEvent.pageY <= y2) {
                         this.eliminarEvento(event)
-                        $('.calendario').fullCalendar('removeEvents', event.id);
-                    }
+                        $('.calendario').fullCalendar('removeEvents', event._id);
+                }
+                $('.delete').find('img').attr('src', "../img/delete.png");
+                $('.delete').css('background-color', '#a70f19')
                 }
             })
         }
